@@ -1,0 +1,58 @@
+name: astrochat
+
+services:
+### PHP APPLICATION ###
+  php:
+    build: ./docker/php
+    env_file:
+      - .env
+    volumes:
+      - "./:/var/www/mercure-chat:rw"
+    depends_on:
+      database:
+        condition: service_healthy
+#      mercure:
+#        condition: service_completed_successfully
+
+### WEB SERVER ###
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "83:80"
+    volumes:
+      - "./public/:/var/www/mercure-chat/public"
+
+### PostgreSQL DATABASE ###
+  database:
+    image: postgres:latest
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+
+### MERCURE ###
+  mercure:
+    image: dunglas/mercure:latest
+    ports:
+      - "3003:80"
+    environment:
+      # Uncomment the following line to disable HTTPS
+      SERVER_NAME: ":80"
+      MERCURE_PUBLISHER_JWT_KEY: "${MERCURE_JWT_KEY}"
+      MERCURE_SUBSCRIBER_JWT_KEY: "${MERCURE_JWT_KEY}"
+      MERCURE_EXTRA_DIRECTIVES: "cors_origins http://localhost:83"
+#    healthcheck:
+#      test: ["CMD", "wget", "-O-", "http://localhost/healthz"]
+#      timeout: 5s
+#      retries: 5
+#      start_period: 60s
+
+volumes:
+  db_data:

@@ -15,7 +15,7 @@ class CreateChannelCommand extends Command
 {
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em, string $name = 'create:channel')
+    public function __construct(EntityManagerInterface $em, string $name = 'channel:create')
     {
         parent::__construct($name);
 
@@ -33,7 +33,7 @@ class CreateChannelCommand extends Command
             )
             ->setHelp(
                 <<<'EOT'
-The <info>create:channel</info> command creates a channel with an <info>name</info> argument
+The <info>channel:create</info> command creates a channel with an <info>name</info> argument
 EOT
             );
     }

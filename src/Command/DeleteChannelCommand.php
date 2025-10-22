@@ -15,7 +15,7 @@ class DeleteChannelCommand extends Command
 {
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em, string $name = 'delete:channel')
+    public function __construct(EntityManagerInterface $em, string $name = 'channel:delete')
     {
         parent::__construct($name);
 
@@ -31,7 +31,7 @@ class DeleteChannelCommand extends Command
             ])
             ->setHelp(
                 <<<'EOT'
-The <info>delete:channel</info> command delete a channel regarding an <info>name</info> argument
+The <info>channel:delete</info> command delete a channel regarding an <info>name</info> argument
 EOT
             );
     }

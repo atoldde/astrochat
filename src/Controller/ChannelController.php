@@ -27,7 +27,7 @@ class ChannelController extends AbstractController
         $response = $this->render('home/index.html.twig', [
             'channels' => $channels ?? []
         ]);
-        $response->headers->set('Link', ['<http://localhost:3000/.well-known/mercure>', 'rel="mercure"']);
+        $response->headers->set('Link', ['<http://localhost:3003/.well-known/mercure>', 'rel="mercure"']);
 
         return $response;
     }
